@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Recommendation System</title>
+    
+     <!--Bootstrap 5 CSS--> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+     <!--Bootstrap Icons--> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+     <!--Custom CSS-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+     <!--Navigation--> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-flower1"></i> Crop Recommendation System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#recommend">Recommend</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#market">Market</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#weather">Weather</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-translate"></i> <span id="currentLanguage">English</span>
+                        </a>
+                        <ul class="dropdown-menu" id="languageMenu">
+                            <li><a class="dropdown-item" href="#" data-lang="en">English</a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="hi">हिंदी (Hindi)</a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="te">తెలుగు (Telugu)</a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="mr">मराठी (Marathi)</a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="pa">ਪੰਜਾਬੀ (Punjabi)</a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="ta">தமிழ் (Tamil)</a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="kn">ಕನ್ನಡ (Kannada)</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+     <!--Hero Section-->
+    <section id="home" class="hero-section bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold text-success mb-3" data-translate="hero.title">
+                        Smart Crop Recommendation
+                    </h1>
+                    <p class="lead mb-4" data-translate="hero.subtitle">
+                        Get AI-powered crop recommendations based on weather, soil conditions, and market trends
+                    </p>
+                    <button class="btn btn-success btn-lg me-2" onclick="scrollToRecommend()">
+                        <i class="bi bi-search"></i> <span data-translate="hero.getStarted">Get Started</span>
+                    </button>
+                </div>
+                <div class="col-lg-6">
+                    <img src="{{ url_for('static', filename='images/farming.jpg') }}" alt="Farming" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Weather Widget--> 
+    <section id="weather" class="py-4 bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <h5 class="card-title mb-3">
+                                        <i class="bi bi-cloud-sun"></i> <span data-translate="weather.title">Live Weather</span>
+                                    </h5>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="weatherCity" placeholder="Enter city name" value="Delhi">
+                                        <button class="btn btn-primary" onclick="fetchWeather()">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div id="weatherData" class="d-flex justify-content-around align-items-center">
+                                        <div class="text-center">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Recommendation Form--> 
+    <section id="recommend" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold" data-translate="recommend.title">Get Crop Recommendations</h2>
+                <p class="text-muted" data-translate="recommend.subtitle">Enter your farming conditions to get personalized crop suggestions</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card shadow">
+                        <div class="card-body p-4">
+                            <form id="recommendForm">
+                                <div class="row g-3"> 
+                                    <div class="col-md-6">
+                                        <label for="state" class="form-label" data-translate="form.state">State</label>
+                                        <select class="form-select" id="state" required>
+                                            <option value="">Select State</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="season" class="form-label" data-translate="form.season">Season</label>
+                                        <select class="form-select" id="season" required>
+                                            <option value="">Select Season</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="rainfall" class="form-label" data-translate="form.rainfall">Annual Rainfall (mm)</label>
+                                        <input type="number" class="form-control" id="rainfall" placeholder="e.g., 1200" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="temperature" class="form-label" data-translate="form.temperature">Temperature (°C)</label>
+                                        <input type="number" class="form-control" id="temperature" placeholder="e.g., 25" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="fertilizer" class="form-label" data-translate="form.fertilizer">Fertilizer (kg/ha)</label>
+                                        <input type="number" class="form-control" id="fertilizer" placeholder="e.g., 100000" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="pesticide" class="form-label" data-translate="form.pesticide">Pesticide (kg/ha)</label>
+                                        <input type="number" class="form-control" id="pesticide" placeholder="e.g., 5000" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="area" class="form-label" data-translate="form.area">Area (hectares)</label>
+                                        <input type="number" class="form-control" id="area" placeholder="e.g., 10000" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-success btn-lg w-100">
+                                            <i class="bi bi-search"></i> <span data-translate="form.submit">Get Recommendations</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!--Results Section--> 
+            <div id="resultsSection" class="mt-5" style="display: none;">
+                <h3 class="text-center mb-4" data-translate="results.title">Recommended Crops</h3>
+                <div id="recommendationsContainer" class="row g-4">
+                     Recommendations will be inserted here 
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Market Prices Section--> 
+    <section id="market" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold" data-translate="market.title">Live Market Prices</h2>
+                <p class="text-muted" data-translate="market.subtitle">Current crop prices and market trends</p>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div id="marketTrends" class="row text-center">
+                                 <!--Market trends will be inserted here--> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="marketPricesContainer" class="row g-3">
+                 <!--Market prices will be inserted here--> 
+            </div>
+        </div>
+    </section>
+
+     <!--Footer--> 
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0" data-translate="footer.text">© 2025 Crop Recommendation System. Empowering farmers with AI technology.</p>
+        </div>
+    </footer>
+
+     <!--Bootstrap JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+     <!--Custom JS - Load translations first--> 
+    <script src="{{ url_for('static', filename='js/translations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const stateSelect = document.getElementById("state");
+        const seasonSelect = document.getElementById("season");
+        const rainfallInput = document.getElementById("rainfall");
+        const fertilizerInput = document.getElementById("fertilizer");
+        const pesticideInput = document.getElementById("pesticide");
+        const areaInput = document.getElementById("area");
+
+        async function fetchAutoValues() {
+            const state = stateSelect.value;
+            const season = seasonSelect.value;
+
+            // Wait until both dropdowns are selected
+            if (!state || !season || state === "Select State" || season === "Select Season") {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/auto-fill?state=${state}&season=${season}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    rainfallInput.value = data.rainfall;
+                    fertilizerInput.value = data.fertilizer;
+                    pesticideInput.value = data.pesticide;
+                    areaInput.value = data.area;
+                }
+            } catch (err) {
+                console.error("Auto-fill error:", err);
+            }
+        }
+
+        stateSelect.addEventListener("change", fetchAutoValues);
+        seasonSelect.addEventListener("change", fetchAutoValues);
+    });
+    </script>
+</body>
+</html>
