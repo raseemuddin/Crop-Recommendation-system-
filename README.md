@@ -135,7 +135,7 @@ Training outputs:
 - Confusion matrix visualization
 - Classification report for all crops
 
-## Voice Commands
+## Translations Commands
 
 Supported commands (in multiple languages):
 - "Show weather" / "मौसम दिखाओ"
@@ -150,8 +150,8 @@ Supported commands (in multiple languages):
 - **ML**: scikit-learn, pandas, numpy
 - **Visualization**: matplotlib, seaborn
 - **Frontend**: Bootstrap 5, HTML5, JavaScript
-- **APIs**: OpenWeatherMap, Agricultural Market APIs
-- **Voice**: Web Speech API
+- **APIs**: OpenWeatherMap
+
 
 ## Dataset
 
