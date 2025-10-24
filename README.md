@@ -8,7 +8,6 @@ A comprehensive Flask-based web application for crop recommendation using machin
 - 🌾 ML-based crop recommendations using Random Forest
 - 🌤️ Live weather integration with agricultural forecasting
 - 💰 Real-time market prices and trends
-- 🎤 Voice command support (multi-language)
 - 🌍 Multi-language support (Hindi, Telugu, Marathi, Punjabi, Tamil, Kannada, English)
 - 📊 Data-driven insights with pros/cons analysis
 - 🌱 Soil analysis and recommendations
